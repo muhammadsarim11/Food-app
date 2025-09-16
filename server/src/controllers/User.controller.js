@@ -75,6 +75,15 @@ export const LoginUser = async (req, res) => {
       process.env.JWT_SECRET,              // secret key (env me rakho)
       { expiresIn: "3d" }                  // expiry time
     );
+  res.cookie("token", token, {
+    httpOnly: true, // frontend JS se access nahi hoga
+    secure: process.env.NODE_ENV === "production", // sirf https par
+    sameSite: "strict",
+    maxAge: 48 * 60 * 60 * 1000, // 1 din
+  });
+
+  // ✅ Header me bhi bhejdo
+  res.setHeader("Authorization", `Bearer ${token}`);
 
     // ✅ Password hide karke user object bhejo
     const userResponse = user.toObject();
