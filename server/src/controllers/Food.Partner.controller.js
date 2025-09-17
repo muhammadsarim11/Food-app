@@ -1,47 +1,56 @@
+import { foodPartner } from "../models/FoodPartner.model"
 
-import jwt from "jsonwebtoken";
-import { User } from "../models/User.model.js";
 import bcrypt from 'bcrypt'
 
 
 
 
-export const RegisterUser = async (req, res) => {
+export const RegisterFoodPartner = async (req,res)=>{
+
   try {
-    const { username, email, password } = req.body;
-
-    if (!(username && email && password)) {
-      return res.status(400).json({ message: "Enter the required fields!!" });
-    }
-
-    const isUserExist = await User.findOne({ email });
-    if (isUserExist) {
-      return res.status(400).json({ message: "User already exists!" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.create({
+      const {username,email,password} = req.body
+  
+      if(!(username && email && password)){
+          return res.status(400).json({
+              message:"fill the required fields!"
+          })
+      }
+  
+  
+      const IsExist =  await foodPartner.findOne({email})
+  
+      if(IsExist){
+          return res.status(400).json({
+              message:"user already exist!"
+          })
+      }
+  const hashedPassword = await bcrypt.hash(password,10)
+  
+  const FoodPartner = await foodPartner.create({
       username,
       email,
-      password: hashedPassword,
-    });
-
-    const userResponse = user.toObject();
-    delete userResponse.password;
-
-    return res.status(201).json({
-      message: "Successfully created!",
-      newUser: userResponse,
-    });
+      password:hashedPassword
+  })
+  
+  
+  const partnerResponse = FoodPartner.toObject()
+  
+  delete partnerResponse.password
+  
+  
+  
+  return res.status(200).json({
+      message:"success",
+      partnerResponse
+  })
+  
   } catch (error) {
-    return res.status(500).json({
-      message: "Something went wrong!",
-      error: error.message,
-    });
+    res.status(500).json({
+        message:"internal error!"
+    })
   }
-};
 
+}
 
 export const LoginUser = async (req, res) => {
   try {
@@ -53,7 +62,7 @@ export const LoginUser = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = await foodPartner.findOne({ email }).select("+password");
 
     if (!user) {
       return res.status(404).json({
@@ -61,7 +70,7 @@ export const LoginUser = async (req, res) => {
       });
     }
 
-    // ✅ Password check
+   
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -69,7 +78,7 @@ export const LoginUser = async (req, res) => {
       });
     }
 
-    // ✅ JWT Token generate
+    
     const token = jwt.sign(
       { id: user._id, email: user.email }, // payload
       process.env.JWT_SECRET,              
@@ -82,10 +91,9 @@ export const LoginUser = async (req, res) => {
     maxAge: 48 * 60 * 60 * 1000, // 1 din
   });
 
-  // ✅ Header me bhi bhejdo
+  // 
   res.setHeader("Authorization", `Bearer ${token}`);
 
-    // ✅ Password hide karke user object bhejo
     const userResponse = user.toObject();
     delete userResponse.password;
 
@@ -101,6 +109,15 @@ export const LoginUser = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
+
+
 
 export const LogoutUser = async (req, res) => {
   try {
