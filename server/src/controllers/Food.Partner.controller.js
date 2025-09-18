@@ -1,4 +1,5 @@
-import { foodPartner } from "../models/FoodPartner.model"
+import jwt from "jsonwebtoken"
+import { foodPartner } from "../models/FoodPartner.model.js"
 
 import bcrypt from 'bcrypt'
 
@@ -46,13 +47,13 @@ export const RegisterFoodPartner = async (req,res)=>{
   
   } catch (error) {
     res.status(500).json({
-        message:"internal error!"
+        message:error
     })
   }
 
 }
 
-export const LoginUser = async (req, res) => {
+export const LoginFoodPartner = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -100,7 +101,7 @@ export const LoginUser = async (req, res) => {
     return res.status(200).json({
       message: "Login successful!",
       token,
-      user: userResponse,
+      partner: userResponse,
     });
   } catch (error) {
     return res.status(500).json({
@@ -119,7 +120,7 @@ export const LoginUser = async (req, res) => {
 
 
 
-export const LogoutUser = async (req, res) => {
+export const LogoutFoodPartner = async (req, res) => {
   try {
     
     res.clearCookie("token", {

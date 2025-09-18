@@ -15,10 +15,10 @@ const foodPartnerSchema = mongoose.Schema({
         required:true,
         unique:true
     },
-    Password:{
+    password:{
         type:String,
         required:true,
-        select:false
+      
     }
 },{
     TimeStamps:true
