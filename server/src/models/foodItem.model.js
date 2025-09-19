@@ -5,7 +5,7 @@ import mongoose  from "mongoose";
 
 
 const FoodSchema = mongoose.Schema({
-    itemName:{
+    name:{
         type:String,
         required:true
     },

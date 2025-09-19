@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { foodItem } from '../models/foodItem.model'
+import { foodItem } from '../models/foodItem.model.js'
 
 
 
