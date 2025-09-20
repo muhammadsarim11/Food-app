@@ -5,6 +5,10 @@ import FoodPartnerRoutes  from "./routes/FoodPartner.routes.js"
 import FoodItemRoutes from "./routes/foodItem.routes.js"
 
 const app = express()
+import dotenv from "dotenv";
+
+
+dotenv.config();
 app.use(express.json())
 app.use(cookieParser())
 
