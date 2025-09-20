@@ -33,3 +33,27 @@ export const AuthFoodPartner =async (req,res,next)=>{
     })
    }
 }
+
+
+
+
+export const AuthUser =async (req,res,next)=>{
+    
+    const token = req.cookies.token
+    try {
+        if(!token){
+
+              return res.status(401).json({
+            message:"token not found!"
+        })
+        }
+        const decoded = jwt.verify(token,process.env.JWT_SECRET)
+
+        req.user = decoded
+        next()
+    } catch (error) {
+        return res.status(500).json({
+            message: "internal server error!"
+        })
+    }
+}
