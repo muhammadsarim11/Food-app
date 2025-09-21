@@ -86,13 +86,14 @@ export const LoginFoodPartner = async (req, res) => {
       { expiresIn: "3d" }                  // expiry time
     );
   res.cookie("token", token, {
-    httpOnly: true, // frontend JS se access nahi hoga
-    secure: process.env.NODE_ENV === "production", // sirf https par
-    sameSite: "strict",
-    maxAge: 48 * 60 * 60 * 1000, // 1 din
-  });
+    maxAge: 48 * 60 * 60 * 1000,
+    httpOnly: false, // should be true for security, but false for JS access
+    secure: false,   // true if using HTTPS
+    sameSite: "none", // must be "none" for cross-origin
+    path: "/"
+  })
 
-  // 
+  // Set Authorization header
   res.setHeader("Authorization", `Bearer ${token}`);
 
     const userResponse = user.toObject();

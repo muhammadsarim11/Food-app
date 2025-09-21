@@ -76,10 +76,10 @@ export const LoginUser = async (req, res) => {
       { expiresIn: "3d" }                  // expiry time
     );
   res.cookie("token", token, {
-    httpOnly: true, // frontend JS se access nahi hoga
-    secure: process.env.NODE_ENV === "production", // sirf https par
-    sameSite: "strict",
-    maxAge: 48 * 60 * 60 * 1000, // 1 din
+  maxAge: 48 * 60 * 60 * 1000,
+  httpOnly: false, // allow JS access if needed
+  secure: false,   // true if using HTTPS
+  sameSite: "none", // or "lax" if using HTTPS
   });
 
   // ✅ Header me bhi bhejdo
